@@ -65,21 +65,22 @@ export const getAllEmployees = async (req, res) => {
     });
   }
 };
-export const getEmployeeByEmpNo = async (req, res) => {
-  const { empNo } = req.params;
 
-  // Validate the empNo
-  if (!empNo) {
+export const getEmployeeById = async (req, res) => {
+  const { id } = req.params;
+
+  // Validate the id
+  if (!id) {
     return res.status(400).json({
-      message: "Missing employee number (empNo).",
+      message: "Missing employee ID.",
     });
   }
 
   try {
-    const employee = await EmployeeModel.getByEmpNo(empNo);
+    const employee = await EmployeeModel.getById(id);
     if (!employee) {
       return res.status(404).json({
-        message: `Employee with empNo "${empNo}" not found.`,
+        message: `Employee with id "${id}" not found.`,
       });
     }
 
@@ -95,8 +96,9 @@ export const getEmployeeByEmpNo = async (req, res) => {
   }
 };
 
+
 export const updateEmployee = async (req, res) => {
-  const { empNo } = req.params;
+  const { id } = req.params;
   const {
     empName,
     empAddressLine1,
@@ -108,14 +110,14 @@ export const updateEmployee = async (req, res) => {
   } = req.body;
 
   // Validate input
-  if (!empNo || !empName || !empAddressLine1 || !empDateOfJoin || typeof empStatus !== "boolean" || !empImage) {
+  if (!id || !empName || !empAddressLine1 || !empDateOfJoin || typeof empStatus !== "boolean" || !empImage) {
     return res.status(400).json({
       message: "Missing required fields. Please provide all employee details.",
     });
   }
 
   try {
-    const updated = await EmployeeModel.updateByEmpNo(empNo, {
+    const updated = await EmployeeModel.updateById(id, {
       empName,
       empAddressLine1,
       empAddressLine2,
@@ -127,7 +129,7 @@ export const updateEmployee = async (req, res) => {
 
     if (!updated) {
       return res.status(404).json({
-        message: `Employee with empNo "${empNo}" not found.`,
+        message: `Employee with id "${id}" not found.`,
       });
     }
 
@@ -142,24 +144,23 @@ export const updateEmployee = async (req, res) => {
   }
 };
 
-
 export const patchEmployee = async (req, res) => {
-  const { empNo } = req.params;
+  const { id } = req.params;
   const fieldsToUpdate = req.body;
 
   // Validate input
-  if (!empNo || Object.keys(fieldsToUpdate).length === 0) {
+  if (!id || Object.keys(fieldsToUpdate).length === 0) {
     return res.status(400).json({
-      message: "Employee number (empNo) and at least one field to update are required.",
+      message: "Employee ID and at least one field to update are required.",
     });
   }
 
   try {
-    const updated = await EmployeeModel.patchByEmpNo(empNo, fieldsToUpdate);
+    const updated = await EmployeeModel.patchById(id, fieldsToUpdate);
 
     if (!updated) {
       return res.status(404).json({
-        message: `Employee with empNo "${empNo}" not found.`,
+        message: `Employee with ID "${id}" not found.`,
       });
     }
 
@@ -169,6 +170,36 @@ export const patchEmployee = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error updating employee",
+      error: error.message,
+    });
+  }
+};
+
+export const deleteEmployee = async (req, res) => {
+  const { id } = req.params;
+
+  // Validate the id
+  if (!id) {
+    return res.status(400).json({
+      message: "Employee ID is required.",
+    });
+  }
+
+  try {
+    const deleted = await EmployeeModel.deleteById(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: `Employee with ID "${id}" not found.`,
+      });
+    }
+
+    res.status(200).json({
+      message: `Employee with ID "${id}" deleted successfully.`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting employee",
       error: error.message,
     });
   }
