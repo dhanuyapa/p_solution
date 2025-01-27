@@ -58,6 +58,54 @@ static async getAll() {
     }
   }
 
+
+  
+  static async updateByEmpNo(empNo, updatedEmployee) {
+    const query = `
+      UPDATE employee 
+      SET empName = ?, empAddressLine1 = ?, empAddressLine2 = ?, empAddressLine3 = ?, 
+          empDateOfJoin = ?, empStatus = ?, empImage = ?
+      WHERE empNo = ?
+    `;
+    const values = [
+      updatedEmployee.empName,
+      updatedEmployee.empAddressLine1,
+      updatedEmployee.empAddressLine2,
+      updatedEmployee.empAddressLine3,
+      updatedEmployee.empDateOfJoin,
+      updatedEmployee.empStatus,
+      updatedEmployee.empImage,
+      empNo,
+    ];
+  
+    try {
+      const [result] = await pool.query(query, values);
+      return result.affectedRows > 0;
+    } catch (error) {
+      throw new Error(`Error updating employee: ${error.message}`);
+    }
+  }
+
+ // Update specific fields of an employee
+ static async patchByEmpNo(empNo, fieldsToUpdate) {
+  const updates = Object.keys(fieldsToUpdate)
+    .map((key) => `${key} = ?`)
+    .join(", ");
+  const values = [...Object.values(fieldsToUpdate), empNo];
+
+  const query = `
+    UPDATE employee 
+    SET ${updates}
+    WHERE empNo = ?
+  `;
+
+  try {
+    const [result] = await pool.query(query, values);
+    return result.affectedRows > 0; // Return true if a record was updated
+  } catch (error) {
+    throw new Error(`Error updating employee: ${error.message}`);
+  }
+}
 }
 
 export default EmployeeModel;

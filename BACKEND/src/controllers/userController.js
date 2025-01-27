@@ -94,3 +94,82 @@ export const getEmployeeByEmpNo = async (req, res) => {
     });
   }
 };
+
+export const updateEmployee = async (req, res) => {
+  const { empNo } = req.params;
+  const {
+    empName,
+    empAddressLine1,
+    empAddressLine2,
+    empAddressLine3,
+    empDateOfJoin,
+    empStatus,
+    empImage,
+  } = req.body;
+
+  // Validate input
+  if (!empNo || !empName || !empAddressLine1 || !empDateOfJoin || typeof empStatus !== "boolean" || !empImage) {
+    return res.status(400).json({
+      message: "Missing required fields. Please provide all employee details.",
+    });
+  }
+
+  try {
+    const updated = await EmployeeModel.updateByEmpNo(empNo, {
+      empName,
+      empAddressLine1,
+      empAddressLine2,
+      empAddressLine3,
+      empDateOfJoin,
+      empStatus,
+      empImage,
+    });
+
+    if (!updated) {
+      return res.status(404).json({
+        message: `Employee with empNo "${empNo}" not found.`,
+      });
+    }
+
+    res.status(200).json({
+      message: "Employee updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating employee",
+      error: error.message,
+    });
+  }
+};
+
+
+export const patchEmployee = async (req, res) => {
+  const { empNo } = req.params;
+  const fieldsToUpdate = req.body;
+
+  // Validate input
+  if (!empNo || Object.keys(fieldsToUpdate).length === 0) {
+    return res.status(400).json({
+      message: "Employee number (empNo) and at least one field to update are required.",
+    });
+  }
+
+  try {
+    const updated = await EmployeeModel.patchByEmpNo(empNo, fieldsToUpdate);
+
+    if (!updated) {
+      return res.status(404).json({
+        message: `Employee with empNo "${empNo}" not found.`,
+      });
+    }
+
+    res.status(200).json({
+      message: "Employee updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating employee",
+      error: error.message,
+    });
+  }
+};
