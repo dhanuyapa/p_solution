@@ -65,3 +65,32 @@ export const getAllEmployees = async (req, res) => {
     });
   }
 };
+export const getEmployeeByEmpNo = async (req, res) => {
+  const { empNo } = req.params;
+
+  // Validate the empNo
+  if (!empNo) {
+    return res.status(400).json({
+      message: "Missing employee number (empNo).",
+    });
+  }
+
+  try {
+    const employee = await EmployeeModel.getByEmpNo(empNo);
+    if (!employee) {
+      return res.status(404).json({
+        message: `Employee with empNo "${empNo}" not found.`,
+      });
+    }
+
+    res.status(200).json({
+      message: "Employee retrieved successfully",
+      employee,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving employee",
+      error: error.message,
+    });
+  }
+};

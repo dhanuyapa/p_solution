@@ -47,6 +47,17 @@ static async getAll() {
     throw new Error(`Error retrieving employees: ${error.message}`);
   }
 }
+// Retrieve a specific employee by ID// Retrieve a specific employee by empNo
+  static async getByEmpNo(empNo) {
+    const query = "SELECT * FROM employee WHERE empNo = ?";
+    try {
+      const [rows] = await pool.query(query, [empNo]);
+      return rows.length ? rows[0] : null; // Return the first row if found
+    } catch (error) {
+      throw new Error(`Error retrieving employee by empNo: ${error.message}`);
+    }
+  }
+
 }
 
 export default EmployeeModel;
