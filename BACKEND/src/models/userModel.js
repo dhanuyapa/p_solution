@@ -36,6 +36,17 @@ class EmployeeModel {
       throw new Error(`Error creating employee: ${error.message}`);
     }
   }
+
+// Retrieve all employees
+static async getAll() {
+  const query = "SELECT * FROM employee";
+  try {
+    const [rows] = await pool.query(query);
+    return rows;
+  } catch (error) {
+    throw new Error(`Error retrieving employees: ${error.message}`);
+  }
+}
 }
 
 export default EmployeeModel;
