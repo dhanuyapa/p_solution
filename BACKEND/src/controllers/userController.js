@@ -1,0 +1,52 @@
+import EmployeeModel from "../models/userModel.js";
+
+export const createEmployee = async (req, res) => {
+  const {
+    empNo,
+    empName,
+    empAddressLine1,
+    empAddressLine2,
+    empAddressLine3,
+    empDateOfJoin,
+    empStatus,
+    empImage,
+  } = req.body;
+
+  // Validate the request body
+  if (
+    !empNo ||
+    !empName ||
+    !empAddressLine1 ||
+    !empDateOfJoin ||
+    typeof empStatus !== "boolean" ||
+    !empImage
+  ) {
+    return res.status(400).json({
+      message: "Missing required fields. Please provide all mandatory details.",
+    });
+  }
+
+  const newEmployee = new EmployeeModel({
+    empNo,
+    empName,
+    empAddressLine1,
+    empAddressLine2: empAddressLine2 || null,
+    empAddressLine3: empAddressLine3 || null,
+    empDateOfJoin,
+    empStatus,
+    empImage,
+  });
+
+  try {
+    const employeeId = await EmployeeModel.create(newEmployee);
+    res.status(201).json({
+      message: "Employee created successfully",
+      employeeId,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error creating employee",
+      error: error.message,
+    });
+  }
+};
