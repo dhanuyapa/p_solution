@@ -65,3 +65,18 @@ put  - http://localhost:3000/api/users/employees/employees/:id
 patch -  http://localhost:3000/api/users/employees/employees/:id
 
 delete -  http://localhost:3000/api/users/employees/employees/:id
+
+
+Example for creating an employee 
+
+
+{
+  "empNo": "EMP004",
+  "empName": "John Doe",
+  "empAddressLine1": "123 Main St",
+  "empAddressLine2": "Apt 4B",
+  "empAddressLine3": "Springfield",
+  "empDateOfJoin": "2025-01-27",
+  "empStatus": true,
+  "empImage": "base64encodedimagehere"
+}
