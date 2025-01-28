@@ -49,9 +49,13 @@ Start the server:
 npm run dev
 
 post- http://localhost:3000/api/users/employees/addemployees
+
 get - http://localhost:3000/api/users/employees/employees
 
 get - http://localhost:3000/api/users/employees/employees/:id
+
 put  - http://localhost:3000/api/users/employees/employees/:id
+
 patch -  http://localhost:3000/api/users/employees/employees/:id
+
 delete -  http://localhost:3000/api/users/employees/employees/:id
