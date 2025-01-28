@@ -18,7 +18,7 @@ Node.js: JavaScript runtime for building the server.
 
 Express.js: Web framework for building RESTful APIs.
 
-MySQL: Relational database for storing employee records.
+MySQL Workbench: Relational database for storing employee records.
 
 dotenv: For managing environment variables.
 
