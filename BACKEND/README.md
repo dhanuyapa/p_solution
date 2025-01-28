@@ -13,11 +13,17 @@ Delete an employee record by id.
 
 
 Technologies Used
+
 Node.js: JavaScript runtime for building the server.
+
 Express.js: Web framework for building RESTful APIs.
+
 MySQL: Relational database for storing employee records.
+
 dotenv: For managing environment variables.
+
 mysql2: MySQL client for database connectivity.
+
 nodemon: For automatic server restarts during development.
 
 
